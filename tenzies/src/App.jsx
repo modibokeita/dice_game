@@ -1,9 +1,8 @@
 import Die from "./Die"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef} from "react"
 import { nanoid } from "nanoid"
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
-
 
 import "./index.css"
 
@@ -13,6 +12,7 @@ function App() {
   const { width, height } = useWindowSize()
   const [message, setMessage] = useState("")
   const [wrongDiceIds, setWrongDiceIds] = useState([])
+  const buttonRef = useRef(null)
 
 // function for generating dices
   function generateAllDices(){
@@ -33,7 +33,9 @@ function App() {
    * filter dice to check if the user
    * made the wrong click then restart the game.
    */
-
+useEffect(() => {
+  buttonRef.current.focus()
+}, [gameWon])
 
    useEffect(() => {
     const heldDice = dice.filter(die => die.isHeld)
@@ -106,7 +108,7 @@ function App() {
         <div className="dice-container">
           {diceElements}
         </div>
-        <button onClick={roll} className="dice-roll">
+        <button ref={buttonRef} onClick={roll} className="dice-roll">
         {gameWon ? "New game" : "Roll"}
           </button>
       </main>
